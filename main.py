@@ -1,0 +1,46 @@
+import sys
+
+import uic
+from PyQt6.QtGui import QPainter, QColor, QPolygonF
+from PyQt6.QtCore import Qt, QRectF, QPointF
+from PyQt6.QtWidgets import QWidget, QApplication
+from random import randint
+from PyQt6 import uic
+
+class Suprematism(QWidget):
+    def __init__(self):
+        super().__init__()
+        uic.loadUi('Ui.ui', self)
+        self.initUI()
+        self.do_paint = False
+        self.x, self.y = -100, -100
+        self.fig = 3
+        self.setMouseTracking(True)
+
+    def paintEvent(self, event):
+        if self.do_paint:
+            qp = QPainter()
+            qp.begin(self)
+            self.draw_flag(qp)
+            qp.end()
+        self.do_paint = False
+
+    def paint(self):
+        self.do_paint = True
+        self.update()
+
+    def draw_flag(self, qp):
+        size = randint(20, 100)
+        self.x, self.y = randint(size, 400 - size), randint(size, 300 - size)
+        color = QColor(255, 255, 0)
+        qp.setBrush(color)
+        if self.fig == 0:
+            rect = QPointF(self.x, self.y)
+            qp.drawEllipse(rect, size, size)
+
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ex = Suprematism()
+    ex.show()
+    sys.exit(app.exec())
